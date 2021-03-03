@@ -9,12 +9,16 @@ const Header = () => {
   const { isAuthenticated } = authState;
 
   const logoutHandler = () => {
-    oktaAuth.signOut();
+    oktaAuth.signOut("/");
   };
   return (
     <Menu mode="horizontal">
-      {!isAuthenticated && <Menu.Item>Home</Menu.Item>}
-      {isAuthenticated && <Menu.Item>Profile</Menu.Item>}
+      {!isAuthenticated && <Menu.Item>Login</Menu.Item>}
+      {isAuthenticated && (
+        <Menu.Item>
+          <Link to="/">Home</Link>
+        </Menu.Item>
+      )}
       {isAuthenticated && (
         <Menu.Item>
           <Link to="/employees">Employees</Link>

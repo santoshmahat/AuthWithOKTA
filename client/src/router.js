@@ -1,37 +1,36 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Security, LoginCallback } from "@okta/okta-react";
+import { Route, Switch, useHistory } from "react-router-dom";
+import { Security, SecureRoute, LoginCallback } from "@okta/okta-react";
 import { OktaAuth } from "@okta/okta-auth-js";
 import AppLayout from "./layouts";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
 import Employees from "./pages/Employees";
 
 const Router = () => {
-  console.log(
-    "REACT_APP_OKTA_CLIENT_ID",
-    process.env.REACT_APP_OKTA_CLIENT_ID,
-    `${window.location.origin}/login/callback`
-  );
+  const history = useHistory();
+
   const oktaAuth = new OktaAuth({
     issuer: process.env.REACT_APP_OKTA_ISSUER,
     redirectUri: `${window.location.origin}/login/callback`,
     clientId: process.env.REACT_APP_OKTA_CLIENT_ID,
   });
 
+  const onAuthRequired = () => {
+    history.push("/login");
+  };
+
   return (
-    <BrowserRouter>
-      <Security oktaAuth={oktaAuth}>
-        <AppLayout>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/login/callback" component={LoginCallback} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/employees" component={Employees} />
-          </Switch>
-        </AppLayout>
-      </Security>
-    </BrowserRouter>
+    <Security oktaAuth={oktaAuth} onAuthRequired={onAuthRequired}>
+      <AppLayout>
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/login/callback" component={LoginCallback} />
+          <SecureRoute exact path="/" component={Home} />
+          <SecureRoute exact path="/employees" component={Employees} />
+        </Switch>
+      </AppLayout>
+    </Security>
   );
 };
 

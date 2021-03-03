@@ -28,7 +28,7 @@ app.use(async (req, res, next) => {
 });
 
 app.get("/employees", (req, res) => {
-  const data = [
+  const employees = [
     {
       name: "Santosh Mahat",
       email: "santoshkraazy@gmail.com",
@@ -38,7 +38,7 @@ app.get("/employees", (req, res) => {
       email: "stevejobs@gmail.com",
     },
   ];
-  res.status(200).json({ data, success: true });
+  res.status(200).json({ employees, success: true });
 });
 
 const PORT = 5000;
