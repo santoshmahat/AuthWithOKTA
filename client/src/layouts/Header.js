@@ -13,7 +13,12 @@ const Header = () => {
   };
   return (
     <Menu mode="horizontal">
-      {!isAuthenticated && <Menu.Item>Login</Menu.Item>}
+      {!isAuthenticated && (
+        <Menu.Item>
+          {" "}
+          <Link to="/login">Login</Link>
+        </Menu.Item>
+      )}
       {isAuthenticated && (
         <Menu.Item>
           <Link to="/">Home</Link>

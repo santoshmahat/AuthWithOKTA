@@ -6,6 +6,7 @@ import AppLayout from "./layouts";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Employees from "./pages/Employees";
+import Register from "./pages/Register";
 
 const Router = () => {
   const history = useHistory();
@@ -25,6 +26,7 @@ const Router = () => {
       <AppLayout>
         <Switch>
           <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
           <Route exact path="/login/callback" component={LoginCallback} />
           <SecureRoute exact path="/" component={Home} />
           <SecureRoute exact path="/employees" component={Employees} />

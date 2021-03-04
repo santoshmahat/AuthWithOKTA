@@ -2,32 +2,30 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const OktaJwtVerifier = require("@okta/jwt-verifier");
-
-const oktaJwtVerifier = new OktaJwtVerifier({
-  clientId: process.env.OKTA_CLIENT_ID,
-  issuer: process.env.OKTA_ISSUER,
-});
+const rootRouter = require("./routes");
+const loginRequired = require("./services/loginRequired");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(async (req, res, next) => {
-  try {
-    console.log("req.headers.authorization", req.headers.authorization);
-    if (!req.headers.authorization)
-      throw new Error("Authorization header is required");
+// app.use(async (req, res, next) => {
+//   try {
+//     console.log("req.headers.authorization", req.headers.authorization);
+//     if (!req.headers.authorization)
+//       throw new Error("Authorization header is required");
 
-    const accessToken = req.headers.authorization.trim();
-    await oktaJwtVerifier.verifyAccessToken(accessToken, "api://default");
-    next();
-  } catch (error) {
-    next(error.message);
-  }
-});
+//     const accessToken = req.headers.authorization.trim();
+//     await oktaJwtVerifier.verifyAccessToken(accessToken, "api://default");
+//     next();
+//   } catch (error) {
+//     next(error.message);
+//   }
+// });
 
-app.get("/employees", (req, res) => {
+rootRouter(app);
+
+app.get("/employees", loginRequired, (req, res) => {
   const employees = [
     {
       name: "Santosh Mahat",
